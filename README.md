@@ -1,5 +1,5 @@
 # Classeviva API
-Classeviva API is an unofficial Spaggiari's electronic register parser & REST API which translates the original spaghetti code of the service in something more readable --- JSON objects. It is built on top of NodeJS with CheerioJS and ExpressJS.
+Classeviva API is an unofficial Spaggiari's electronic register parser & REST API which translates the original spaghetti code of the service in something more readable — JSON objects. It is built on top of NodeJS with CheerioJS and ExpressJS.
 ## Features
 By now, Classeviva API can provide you:
  * Login & session id
@@ -29,11 +29,14 @@ In a nutshell, the Node application makes requests to the original website, pars
  * `/sessionId/files`
     * Returns a JSON object containing all the files to which the user can access
     * Example output: `{"Teacher Name":[{"name":"Folder name","list":[{"file":"File name","id":"numeric file id","url":"https://web.spaggiari.eu/cvv/app/default/didattica_genitori.php?a=downloadContenuto&contenuto_id=[fileid]"}]}]}`
+
 ## Installation
+Make sure you have installed NodeJS & npm
  * `git clone https://github.com/ALCC01/ClassevivaAPI.git`
  * `cd ClassevivaAPI`
  * `[sudo] npm install`
  * `node app.js`
+
 ## Contributing
 Pull requests are welcome.
 ## License
