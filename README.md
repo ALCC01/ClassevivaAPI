@@ -7,7 +7,7 @@ By now, Classeviva API can provide you:
  * Agenda
  * Files
  
-It obviously requires you to use a schooid, a user id and a password. Since Spaggiari is not able to support email and userid login in the same script, email login is not currently supported.
+It obviously requires you to use a school id, a user id and a password. Since Spaggiari is not able to support email and userid login in the same script, email login is not currently supported.
 ## How does it work
 In a nutshell, the Node application makes requests to the original website, parses the HTML code and returns data in JSON format, that can be implemented in pretty much every application.
 ## Endpoints
