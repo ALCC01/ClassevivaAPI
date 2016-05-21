@@ -41,29 +41,29 @@ app.get('/:sessionId/', function (req, res) {
 	});
 });
 
-app.get('/:sessionId/votes', function (req, res) {
+app.get('/:sessionId/grades', function (req, res) {
 	var url = base_url + "genitori_note.php";
 	request({url: url, /*jar: jar*/ headers: {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:37.0) Gecko/20100101 Firefox/37.0',
 	            'Set-Cookie': "PHPSESSID=" + req.params.sessionId,
 	            'Cookie': "PHPSESSID=" + req.params.sessionId}
 	}, function(error, response, body) {
 		$ = cheerio.load(body);
-		var votes = new Object();
+		var grades = new Object();
 		var subject =  [];
 		$('#data_table_2 tr').not('#placeholder_row').each(function(i, e) {
 			if ($(this).children('td').first().text().match(/[a-z]/i)) {
 				var entry = $(this).children('td').first().text().replace(/(\n)/gm, "");
 				if (entry != subject) {
-					  votes[entry] = [];
+					  grades[entry] = [];
 					  subject = entry;
 				}
 			} else {
 				var entry = $(this).children('td').eq(1).children('div').children('p').text();
 				var what = $(this).children('td').eq(1).children('p').text()
-				votes[subject].push({vote:entry, type:what});
+				grades[subject].push({grade:entry, type:what});
 			}
 		});
-		res.send(votes);
+		res.send(grades);
 	});
 });
 
