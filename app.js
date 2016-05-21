@@ -59,8 +59,10 @@ app.get('/:sessionId/grades', function (req, res) {
 				}
 			} else {
 				var entry = $(this).children('td').eq(1).children('div').children('p').text();
-				var what = $(this).children('td').eq(1).children('p').text()
-				grades[subject].push({grade:entry, type:what});
+				var what = $(this).children('td').eq(1).children('p').text().split(" - ");
+                var gradetype = what[0];
+                var date = what[1];
+				grades[subject].push({grade:entry, type:gradetype, date:date});
 			}
 		});
 		res.send(grades);
