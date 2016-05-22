@@ -3,7 +3,7 @@ Classeviva API is an unofficial Spaggiari's electronic register parser & REST AP
 ## Features
 By now, Classeviva API can provide you:
  * Login & session id
- * Votes
+ * Grades
  * Agenda
  * Files
  
@@ -21,9 +21,9 @@ In a nutshell, the Node application makes requests to the original website, pars
     *  `sessionId`: The session id (hopefully, you obtained it with the previous endpoint)
     *  Returns the user name and the school name (you can use it to check if the session id is still valid too)
     *  Example output: `{"status":"OK","name":"FOO BAR","school":"FOOBAR Elementary School"}`
- * `/sessionId/votes`
-    * Returns a JSON object containing all the user's vote
-    * Example output: `{"storia":[{"vote":"5","type":"Orale - 10/9"}],"inglese":[{"vote":"10","type":"Scritto/Grafico - 09/09"}]}`
+ * `/sessionId/grades`
+    * Returns a JSON object containing all the user's grades
+    * Example output: `{"storia":[{"grade":"5","type":"Orale:,"date":10/9"}],"inglese":[{"grade":"10","type":"Scritto/Grafico","date":"09/09"}]}`
  * `/sessionId/agenda`
     * Returns a JSON object containing the user's agenda from the previous day to the next week (will be changed to allow the use of custom timestamps)
  * `/sessionId/files`
