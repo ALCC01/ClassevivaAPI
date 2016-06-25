@@ -1,56 +1,66 @@
-var express = require('express');
-var request = require('request');
-var cheerio = require('cheerio');
-var app = express();
-var global_base_url = "https://web.spaggiari.eu/home/app/default/";
-var base_url = "https://web.spaggiari.eu/cvv/app/default/";
+'use strict';
+const express = require('express'),
+	request = require('request'),
+	cheerio = require('cheerio'),
+	config = require('./config.json'),
+	app = express(),
+	global_base_url = "https://web.spaggiari.eu/home/app/default/",
+	base_url = "https://web.spaggiari.eu/cvv/app/default/",
+	// Common user agent
+	user_agent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36";
 
 app.get('/', function (req, res) {
 	res.send('{"status":"error"}')
 });
 
-app.get('/:custcode/:usercode/:password', function (req, res) {
+app.get('/:custcode/:usercode/:password', (req, res) => {
 	var url = global_base_url + "login.php?custcode="+ req.params.custcode +"&login="+ req.params.usercode +"&password="+ req.params.password + "&mode=custcode";
 	var jar = request.jar();
-	request({url: url, jar: jar}, function(error, response, body) {
-		  $ = cheerio.load(body);
-		  if ($('.name').length) {
-		  	res.send('{"status":"OK", "sessionId":"' + jar.getCookies(url)[0].value + '"}');
-		  } else {
-		  	res.send('{"status":"error"}');
-		  }
-	});
-});
-
-app.get('/:sessionId/', function (req, res) {
-	var url = global_base_url + "menu_webinfoschool_genitori.php";
-	request({url: url, /*jar: jar*/ headers: {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:37.0) Gecko/20100101 Firefox/37.0',
-	            'Set-Cookie': "PHPSESSID=" + req.params.sessionId,
-	            'Cookie': "PHPSESSID=" + req.params.sessionId}
-	}, function(error, response, body) {
-		$ = cheerio.load(body);
+	request({url: url, jar: jar}, (error, response, body) => {
+		var $ = cheerio.load(body);
+		var result = {};
+		if (error) return res.send('{"status":"error"}');
 		if ($('.name').length) {
-			var result = {};
 			result.status = "OK";
-			result.name = $('.name').text();
-			result.school = $('.scuola').text();
-			res.send(JSON.stringify(result));
+			result.sessionId = jar.getCookies(url)[0].value;
+			res.send(result);
 		} else {
 			res.send('{"status":"error"}');
 		}
 	});
 });
 
-app.get('/:sessionId/grades', function (req, res) {
+app.get('/:sessionId/', (req, res) => {
+	var url = global_base_url + "menu_webinfoschool_genitori.php";
+	request({url: url, headers: {'User-Agent': user_agent,
+		'Set-Cookie': "PHPSESSID=" + req.params.sessionId,
+		'Cookie': "PHPSESSID=" + req.params.sessionId}
+	}, (error, response, body) => {
+		var $ = cheerio.load(body);
+		if (error) return res.send('{"status":"error"}');
+		if ($('.name').length) {
+			var result = {};
+			result.status = "OK";
+			result.name = $('.name').text();
+			result.school = $('.scuola').text();
+			res.send(result);
+		} else {
+			res.send('{"status":"error"}');
+		}
+	});
+});
+
+app.get('/:sessionId/grades', (req, res) => {
 	var url = base_url + "genitori_note.php";
-	request({url: url, /*jar: jar*/ headers: {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:37.0) Gecko/20100101 Firefox/37.0',
-	            'Set-Cookie': "PHPSESSID=" + req.params.sessionId,
-	            'Cookie': "PHPSESSID=" + req.params.sessionId}
-	}, function(error, response, body) {
-		$ = cheerio.load(body);
-		var result = {};
-		var grades = {};
-		var subject =  [];
+	request({url: url, headers: {'User-Agent': user_agent,
+		'Set-Cookie': "PHPSESSID=" + req.params.sessionId,
+		'Cookie': "PHPSESSID=" + req.params.sessionId}
+	}, (error, response, body) => {
+		var $ = cheerio.load(body),
+			result = {},
+			grades = {},
+			subject =  [];
+		if (error) return res.send('{"status":"error"}');
 		if ($('.name').length) {
 			$('#data_table_2 tr').not('#placeholder_row').each(function (i, e) {
 				if ($(this).children('td').first().text().match(/[a-z]/i)) {
@@ -69,20 +79,21 @@ app.get('/:sessionId/grades', function (req, res) {
 			});
 			result.status = "OK";
 			result.grades = grades;
-			res.send(JSON.stringify(result));
+			res.send(result);
 		} else {
 			res.send('{"status":"error"}');
 		}
 	});
 });
 
-app.get('/:sessionId/agenda', function (req, res) {
+app.get('/:sessionId/agenda', (req, res) => {
 	var url = base_url + "agenda_studenti.php?ope=get_events&classe_id=&gruppo_id=&start=" + parseInt(((new Date).getTime() / 1000 - 8640000)) + "&end=" + parseInt(((new Date).getTime() / 1000 + 86400 * 7));
-	request({url: url, /*jar: jar*/ headers: {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:37.0) Gecko/20100101 Firefox/37.0',
-	            'Set-Cookie': "PHPSESSID=" + req.params.sessionId,
-	            'Cookie': "PHPSESSID=" + req.params.sessionId}
-	}, function(error, response, body) {
+	request({url: url, headers: {'User-Agent': user_agent,
+		'Set-Cookie': "PHPSESSID=" + req.params.sessionId,
+		'Cookie': "PHPSESSID=" + req.params.sessionId}
+	}, (error, response, body) => {
 		var result = {};
+		if (error) return res.send('{"status":"error"}');
 		if (body !== 'null') {
 			result.status = "OK";
 			result.agenda = JSON.parse(body);
@@ -93,17 +104,17 @@ app.get('/:sessionId/agenda', function (req, res) {
 	});
 });
 
-app.get('/:sessionId/files', function (req, res) {
+app.get('/:sessionId/files', (req, res) => {
 	var url = base_url + "didattica_genitori.php";
-	request({url: url, /*jar: jar*/ headers: {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:37.0) Gecko/20100101 Firefox/37.0',
+	request({url: url, headers: {'User-Agent': user_agent,
 		'Set-Cookie': "PHPSESSID=" + req.params.sessionId,
 		'Cookie': "PHPSESSID=" + req.params.sessionId}
-	}, function(error, response, body) {
-		$ = cheerio.load(body);
-
-		var files = {};
-		var result = {};
-		var teacher = "";
+	}, (error, response, body) => {
+		var $ = cheerio.load(body),
+			files = {},
+			result = {},
+			teacher = "";
+		if (error) return res.send('{"status":"error"}');
 		if ($('.name').length) {
 			$('#data_table tr').slice(9).each(function (i, e) {
 				var entry = $(this);
@@ -133,9 +144,7 @@ app.get('/:sessionId/files', function (req, res) {
 	});
 });
 
-var server = app.listen(3000, function () {
-  var host = server.address().address;
-  var port = server.address().port;
-
-  console.log('Classeviva API listening on port %s', host, port);
+var server = app.listen(process.env.PORT || config.port || 8080, () => {
+	var port = server.address().port;
+	console.log(`Classeviva API listening on port ${port}`);
 });
