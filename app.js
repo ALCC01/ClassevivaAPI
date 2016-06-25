@@ -6,7 +6,7 @@ var global_base_url = "https://web.spaggiari.eu/home/app/default/";
 var base_url = "https://web.spaggiari.eu/cvv/app/default/";
 
 app.get('/', function (req, res) {
-	res.send("No arguments provided")
+	res.send('{"status":"error"}')
 });
 
 app.get('/:custcode/:usercode/:password', function (req, res) {
@@ -30,10 +30,10 @@ app.get('/:sessionId/', function (req, res) {
 	}, function(error, response, body) {
 		$ = cheerio.load(body);
 		if ($('.name').length) {
-			var result = new Object();
-			result['status'] = "OK";
-			result['name'] = $('.name').text();
-			result['school'] = $('.scuola').text();
+			var result = {};
+			result.status = "OK";
+			result.name = $('.name').text();
+			result.school = $('.scuola').text();
 			res.send(JSON.stringify(result));
 		} else {
 			res.send('{"status":"error"}');
@@ -48,35 +48,48 @@ app.get('/:sessionId/grades', function (req, res) {
 	            'Cookie': "PHPSESSID=" + req.params.sessionId}
 	}, function(error, response, body) {
 		$ = cheerio.load(body);
-		var grades = new Object();
+		var result = {};
+		var grades = {};
 		var subject =  [];
-		$('#data_table_2 tr').not('#placeholder_row').each(function(i, e) {
-			if ($(this).children('td').first().text().match(/[a-z]/i)) {
-				var entry = $(this).children('td').first().text().replace(/(\n)/gm, "");
-				if (entry != subject) {
-					  grades[entry] = [];
-					  subject = entry;
+		if ($('.name').length) {
+			$('#data_table_2 tr').not('#placeholder_row').each(function (i, e) {
+				if ($(this).children('td').first().text().match(/[a-z]/i)) {
+					var entry = $(this).children('td').first().text().replace(/(\n)/gm, "");
+					if (entry != subject) {
+						grades[entry] = [];
+						subject = entry;
+					}
+				} else {
+					var entry = $(this).children('td').eq(1).children('div').children('p').text();
+					var what = $(this).children('td').eq(1).children('p').text().split(" - ");
+					var gradetype = what[0];
+					var date = what[1];
+					grades[subject].push({grade: entry, type: gradetype, date: date});
 				}
-			} else {
-				var entry = $(this).children('td').eq(1).children('div').children('p').text();
-				var what = $(this).children('td').eq(1).children('p').text().split(" - ");
-                var gradetype = what[0];
-                var date = what[1];
-				grades[subject].push({grade:entry, type:gradetype, date:date});
-			}
-		});
-		res.send(grades);
+			});
+			result.status = "OK";
+			result.grades = grades;
+			res.send(JSON.stringify(result));
+		} else {
+			res.send('{"status":"error"}');
+		}
 	});
 });
 
 app.get('/:sessionId/agenda', function (req, res) {
-	var url = base_url + "agenda_studenti.php?ope=get_events&classe_id=&gruppo_id=&start=" + parseInt(((new Date).getTime() / 1000 - 86400)) + "&end=" + parseInt(((new Date).getTime() / 1000 + 86400 * 7));
+	var url = base_url + "agenda_studenti.php?ope=get_events&classe_id=&gruppo_id=&start=" + parseInt(((new Date).getTime() / 1000 - 8640000)) + "&end=" + parseInt(((new Date).getTime() / 1000 + 86400 * 7));
 	request({url: url, /*jar: jar*/ headers: {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:37.0) Gecko/20100101 Firefox/37.0',
 	            'Set-Cookie': "PHPSESSID=" + req.params.sessionId,
 	            'Cookie': "PHPSESSID=" + req.params.sessionId}
 	}, function(error, response, body) {
-		$ = cheerio.load(body);
-		res.send(body);
+		var result = {};
+		if (body !== 'null') {
+			result.status = "OK";
+			result.agenda = JSON.parse(body);
+			res.send(result);
+		} else {
+			res.send('{"status":"error"}')
+		}
 	});
 });
 
@@ -89,23 +102,34 @@ app.get('/:sessionId/files', function (req, res) {
 		$ = cheerio.load(body);
 
 		var files = {};
+		var result = {};
 		var teacher = "";
-		$('#data_table tr').slice(9).each(function(i, e) {
-			var entry = $(this);
-			if (entry.attr('style') == "height: 40px;") {
-				teacher = entry.text().slice(21, -7);
-				files[teacher] = [];
-			}
-			if (entry.hasClass('row_parent')) {
-				var name = entry.text().slice(5, -4);
-				files[teacher].push({"name":name, "list":[]});
-			}
-			if (entry.hasClass('contenuto')) {
-				var name = entry.children('.contenuto_desc').children('div').children('span').eq(0).text()
-			  	files[teacher][files[teacher].length-1]['list'].push({"file":name, "id":entry.attr('contenuto_id'), "url":base_url + "didattica_genitori.php?a=downloadContenuto&contenuto_id=" + entry.attr('contenuto_id')});	
-			}
-		});
-		res.send(files);
+		if ($('.name').length) {
+			$('#data_table tr').slice(9).each(function (i, e) {
+				var entry = $(this);
+				if (entry.attr('style') == "height: 40px;") {
+					teacher = entry.text().slice(21, -7);
+					files[teacher] = [];
+				}
+				if (entry.hasClass('row_parent')) {
+					var name = entry.text().slice(5, -4);
+					files[teacher].push({"name": name, "list": []});
+				}
+				if (entry.hasClass('contenuto')) {
+					var name = entry.children('.contenuto_desc').children('div').children('span').eq(0).text()
+					files[teacher][files[teacher].length - 1]['list'].push({
+						"file": name,
+						"id": entry.attr('contenuto_id'),
+						"url": base_url + "didattica_genitori.php?a=downloadContenuto&contenuto_id=" + entry.attr('contenuto_id')
+					});
+				}
+			});
+			result.status = "OK";
+			result.files = files;
+			res.send(result);
+		} else {
+			res.send('{"status":"error"}')
+		}
 	});
 });
 

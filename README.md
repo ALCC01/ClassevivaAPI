@@ -23,19 +23,20 @@ In a nutshell, the Node application makes requests to the original website, pars
     *  Example output: `{"status":"OK","name":"FOO BAR","school":"FOOBAR Elementary School"}`
  * `/sessionId/grades`
     * Returns a JSON object containing all the user's grades
-    * Example output: `{"storia":[{"grade":"5","type":"Orale:,"date":10/9"}],"inglese":[{"grade":"10","type":"Scritto/Grafico","date":"09/09"}]}`
+    * Example output: `{"status":"OK", "grades":{"storia":[{"grade":"5","type":"Orale:,"date":10/9"}],"inglese":[{"grade":"10","type":"Scritto/Grafico","date":"09/09"}]}`
  * `/sessionId/agenda`
     * Returns a JSON object containing the user's agenda from the previous day to the next week (will be changed to allow the use of custom timestamps)
  * `/sessionId/files`
     * Returns a JSON object containing all the files to which the user can access
-    * Example output: `{"Teacher Name":[{"name":"Folder name","list":[{"file":"File name","id":"numeric file id","url":"https://web.spaggiari.eu/cvv/app/default/didattica_genitori.php?a=downloadContenuto&contenuto_id=[fileid]"}]}]}`
+    * Example output: `{"status":"OK", "files":{"Teacher Name":[{"name":"Folder name","list":[{"file":"File name","id":"numeric file id","url":"https://web.spaggiari.eu/cvv/app/default/didattica_genitori.php?a=downloadContenuto&contenuto_id=[fileid]"}]}]}}`
 
+If an error occours or the session ID is not valid, `{"status":"error"}` is returned
 ## Installation
 Make sure you have installed NodeJS & npm
  * `git clone https://github.com/ALCC01/ClassevivaAPI.git`
  * `cd ClassevivaAPI`
  * `[sudo] npm install`
- * `node app.js`
+ * `npm start`
 
 ## Contributing
 Pull requests are welcome.
