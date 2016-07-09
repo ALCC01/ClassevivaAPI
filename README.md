@@ -7,7 +7,7 @@ By now, Classeviva API can provide you:
  * Agenda
  * Files
  
-It obviously requires you to use a school id, a user id and a password. Since Spaggiari is not able to support email and userid login in the same script, email login is not currently supported.
+It obviously requires you to use a school id, a user id and a password. Both email and user id login are supported.
 ## How does it work
 In a nutshell, the Node application makes requests to the original website, parses the HTML code and returns data in JSON format, that can be implemented in pretty much every application.
 ## Endpoints
@@ -17,6 +17,13 @@ In a nutshell, the Node application makes requests to the original website, pars
     * `password`: Does it even need an explanation?
     * Checks if the password matches and returns the session id that you will need for every other operation
     * Example output: `{"status":"OK", "sessionId":"<random alphanumeric 32chars-long string>"}`
+ * `/custcode/userid/password/mode`
+     * `custcode`: The school id. If an email is being used, you can set this to a random value as long as it is provided.
+     * `userid`: The user id provided by Spaggiari or the user's email.
+     * `password`: Does it even need an explanation?
+     * `mode`: Login mode: `email` or `custcode`
+     * Checks if the password matches and returns the session id that you will need for every other operation
+     * Example output: `{"status":"OK", "sessionId":"<random alphanumeric 32chars-long string>"}`
  * `/sessionId`
     *  `sessionId`: The session id (hopefully, you obtained it with the previous endpoint)
     *  Returns the user name and the school name (you can use it to check if the session id is still valid too)

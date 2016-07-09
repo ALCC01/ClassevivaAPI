@@ -14,7 +14,30 @@ app.get('/', function (req, res) {
 });
 
 app.get('/:custcode/:usercode/:password', (req, res) => {
-	var url = global_base_url + "login.php?custcode="+ req.params.custcode +"&login="+ req.params.usercode +"&password="+ req.params.password + "&mode=custcode";
+	var url = global_base_url + "login.php?custcode="+ req.params.custcode +"&login="+ req.params.usercode +"&password="+ req.params.password;
+	var jar = request.jar();
+	request({url: url, jar: jar}, (error, response, body) => {
+		var $ = cheerio.load(body);
+		var result = {};
+		if (error) return res.send('{"status":"error"}');
+		if ($('.name').length) {
+			result.status = "OK";
+			result.sessionId = jar.getCookies(url)[0].value;
+			res.send(result);
+		} else {
+			res.send('{"status":"error"}');
+		}
+	});
+});
+
+app.get('/:custcode/:usercode/:password/:mode', (req, res) => {
+	var custcode = req.params.custcode,
+		login = req.params.usercode,
+		password = req.params.password,
+		mode = req.params.mode,
+		script = mode.toLowerCase() === "email" ? "login_email.php" : "login.php";
+	var url = `${global_base_url}${script}?custcode=${custcode}&login=${login}&password=${password}&mode=${mode}`;
+	//var url = global_base_url + "login.php?custcode="+ req.params.custcode +"&login="+ req.params.usercode +"&password="+ req.params.password + "&mode=" + req.params.mode;
 	var jar = request.jar();
 	request({url: url, jar: jar}, (error, response, body) => {
 		var $ = cheerio.load(body);
