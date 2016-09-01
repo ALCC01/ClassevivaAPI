@@ -4,8 +4,8 @@ const express = require('express'),
 	cheerio = require('cheerio'),
 	config = require('./config.json'),
 	app = express(),
-	global_base_url = "https://web.spaggiari.eu/home/app/default/",
-	base_url = "https://web.spaggiari.eu/cvv/app/default/",
+	global_base_url = "https://web15.spaggiari.eu/home/app/default/",
+	base_url = "https://web15.spaggiari.eu/cvv/app/default/",
 	// Common user agent
 	user_agent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36";
 

@@ -6,7 +6,7 @@ By now, Classeviva API can provide you:
  * Grades
  * Agenda
  * Files
- 
+
 It obviously requires you to use a school id, a user id and a password. Both email and user id login are supported.
 ## How does it work
 In a nutshell, the Node application makes requests to the original website, parses the HTML code and returns data in JSON format, that can be implemented in pretty much every application.
@@ -35,7 +35,7 @@ In a nutshell, the Node application makes requests to the original website, pars
     * Returns a JSON object containing the user's agenda from the previous day to the next week (will be changed to allow the use of custom timestamps)
  * `/sessionId/files`
     * Returns a JSON object containing all the files to which the user can access
-    * Example output: `{"status":"OK", "files":{"Teacher Name":[{"name":"Folder name","list":[{"file":"File name","id":"numeric file id","url":"https://web.spaggiari.eu/cvv/app/default/didattica_genitori.php?a=downloadContenuto&contenuto_id=[fileid]"}]}]}}`
+    * Example output: `{"status":"OK", "files":{"Teacher Name":[{"name":"Folder name","list":[{"file":"File name","id":"numeric file id","url":"https://web15.spaggiari.eu/cvv/app/default/didattica_genitori.php?a=downloadContenuto&contenuto_id=[fileid]"}]}]}}`
 
 If an error occours or the session ID is not valid, `{"status":"error"}` is returned
 ## Installation
