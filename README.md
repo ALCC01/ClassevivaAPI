@@ -12,7 +12,7 @@ It obviously requires you to use a school id, a user id and a password. Both ema
 In a nutshell, the Node application makes requests to the original website, parses the HTML code and returns data in JSON format, that can be implemented in pretty much every application.
 ## Endpoints
  * `/custcode/userid/password`
-    * `custcode`: The school id. Do not ask me why Spaggiari has called it so.
+    * `custcode`: The school id (Customer Code)
     * `userid`: The user id provided by Spaggiari.
     * `password`: Does it even need an explanation?
     * Checks if the password matches and returns the session id that you will need for every other operation
