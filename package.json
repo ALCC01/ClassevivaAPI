@@ -1,7 +1,7 @@
 {
   "name": "classeviva",
   "description": "Classeviva Electronic register (unofficial) parser & API",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "license": "GPL-3.0",
   "author": {
     "name": "Alberto Coscia",
@@ -11,6 +11,14 @@
     "type": "git",
     "url": "https://github.com/ALCC01/ClassevivaAPI.git"
   },
+  "bugs": {
+    "url": "https://github.com/ALCC01/ClassevivaAPI/issues"
+  },
+  "keywords": [
+    "classeviva",
+    "register",
+    "spaggiari"
+  ],
   "private": false,
   "scripts": {
     "start": "node ./app.js"

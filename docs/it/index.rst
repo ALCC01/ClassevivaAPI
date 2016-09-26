@@ -5,7 +5,7 @@ ClassevivaAPI è un modulo NodeJS e un'API REST-like che permette di accedere ai
 
 .. note::
 
-    The english documentation can be found `here </en>`_.
+    The english documentation can be found `here <en>`_.
 
 =======
 Feature

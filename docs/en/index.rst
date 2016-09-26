@@ -6,7 +6,7 @@ electronic register.
 
 .. note::
 
-    The italian documentation can be found `here </it>`_. È possibile trovare la documentazione in italiano `qui </it>`_.
+    The italian documentation can be found `here <it>`_. È possibile trovare la documentazione in italiano `qui <it>`_.
 
 ========
 Features
