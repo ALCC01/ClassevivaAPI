@@ -107,3 +107,22 @@ Questa pagina copre la documentazione per l'oggetto ``Session``.
                 ...
             ]
         }
+
+.. js:function:: notes()
+
+    :returns: Una promise che restituisce un array.
+
+    Restituisce una promise che restituisce array delle annotazioni e sanzioni dell'utente.
+
+    .. code-block:: javascript
+        :linenos:
+
+            [
+                {
+                    "teacher": "CRISTINA ROSSI",
+                    "date": "29-07-2016",
+                    "content": "2 cool 4 school",
+                    "type": "Annotazione del docente"
+                },
+                ...
+            ]

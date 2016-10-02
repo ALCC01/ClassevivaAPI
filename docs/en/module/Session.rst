@@ -38,7 +38,7 @@ This page covers the ``Session`` object.
         :linenos:
 
         {
-            'lingua e letteratura italiana': [
+            lingua e letteratura italiana: [
                 {
                     grade: '9-',
                     type: 'Scritto/Grafico',
@@ -106,3 +106,22 @@ This page covers the ``Session`` object.
                 ...
             ]
         }
+
+.. js:function:: notes()
+
+    :returns: A promise that resolves to an array.
+
+    Returns a promise that resolves to an array representing the user's notes and sanctions.
+
+    .. code-block:: javascript
+        :linenos:
+
+        [
+            {
+                "teacher": "CRISTINA ROSSI",
+                "date": "29-07-2016",
+                "content": "2 cool 4 school",
+                "type": "Annotazione del docente"
+            },
+            ...
+        ]

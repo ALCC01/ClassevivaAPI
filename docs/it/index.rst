@@ -3,10 +3,6 @@ Benvenuto nella documentazione di ClassevivaAPI
 
 ClassevivaAPI è un modulo NodeJS e un'API REST-like che permette di accedere ai dati del registro elettronico Classeviva di Spaggiari.
 
-.. note::
-
-    The english documentation can be found `here <en>`_.
-
 =======
 Feature
 =======
