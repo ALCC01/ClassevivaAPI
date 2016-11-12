@@ -1,4 +1,4 @@
-# ClassevivaAPI
+# ClassevivaAPI ![NPM](https://img.shields.io/npm/v/classeviva.svg)
 
 ClassevivaAPI is a NodeJS module and a REST-like API that allows you to access to data from Spaggiari's Classeviva
 electronic register.
